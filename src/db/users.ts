@@ -30,7 +30,7 @@ export const createUser = (values: Record<string, any>) =>
     .save()
     .then((user: Record<string, any>) => user.toObject())
 
-export const deleteUser = (id: string) =>
+export const deleteUserById = (id: string) =>
   UserModel.findOneAndDelete({ _id: id })
 
 export const updateUserById = (id: string, values: Record<string, any>) =>
