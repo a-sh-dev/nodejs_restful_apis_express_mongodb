@@ -1,8 +1,49 @@
 import { createUser, getUserByEmail } from '../db/users'
-import express from 'express'
+import { Request, Response } from 'express'
 import { authentication, randomAuthString } from '../helpers/authentication'
 
-export const register = async (req: express.Request, res: express.Response) => {
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return res
+        .status(500)
+        .json({ message: `Please provide 'email' and 'password` })
+    }
+
+    // !Must include the select chain to access the Hashed password
+    const user = await getUserByEmail(email).select(
+      '+authentication.salt +authentication.password',
+    )
+
+    if (!user) {
+      return res.status(400).json({ message: `User '${email}' does not exist` })
+    }
+
+    const expectedHash = authentication(user.authentication.salt, password)
+    if (user.authentication.password !== expectedHash) {
+      return res.sendStatus(403)
+    }
+
+    const salt = randomAuthString()
+    user.authentication.sessionToken = authentication(salt, user._id.toString())
+
+    await user.save()
+
+    res.cookie('LEARN-MDB-AUTH', user.authentication.sessionToken, {
+      domain: 'localhost',
+      path: '/',
+    })
+
+    return res.status(200).json(user).end()
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, username } = req.body
 
