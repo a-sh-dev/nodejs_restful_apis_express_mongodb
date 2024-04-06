@@ -4,13 +4,9 @@ Deepening my back-end skills by building RESTful APIs with NodeJS, Express and n
 
 - Create and configure user creation password and user login with protection layer for sensitive data (password is hashed and is not visible on the database)
 - Configure middlewares to authenticate login, update and delete requests
-- Experimenting with `pnpm`
-
---
+- Experimenting with `pnpm`. I used `pnpm` for this project. I highly encourage using it as a more performant `npm` or alternative to `yarn`.
 
 ## Instructions
-
-I used `pnpm` for this project. I highly encourage using it as a more performant `npm` or alternative to `yarn`.
 
 Clone this repo then after installing `pnpm`, install the dependencies and run:
 
