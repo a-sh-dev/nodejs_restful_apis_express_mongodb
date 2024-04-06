@@ -1,6 +1,7 @@
 import { createUser, getUserByEmail } from '../db/users'
 import { Request, Response } from 'express'
 import { authentication, randomAuthString } from '../helpers/authentication'
+import { COOKIE_AUTH } from '../constants'
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -31,7 +32,7 @@ export const login = async (req: Request, res: Response) => {
 
     await user.save()
 
-    res.cookie('LEARN-MDB-AUTH', user.authentication.sessionToken, {
+    res.cookie(COOKIE_AUTH, user.authentication.sessionToken, {
       domain: 'localhost',
       path: '/',
     })
